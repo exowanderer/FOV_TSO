@@ -28,7 +28,7 @@ def stellarModels(times, nTimes, nStars, minLogPeriod, maxLogPeriod, nPeriods, s
 def generate_field_of_view(nTimes=1000, imageSize=1024, nStars=100, 
                            fwhm=3., tMin=0, tMax=10, nPeriods=10,
                            minLogPeriod=-3, maxLogPeriod=2,
-                           stdAmp=5e-3):
+                           stdAmp=5e-3, returnAll=False):
   
   # set up size of data cube
   imageCube = empty((nTimes, imageSize, imageSize))
