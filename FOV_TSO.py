@@ -4,7 +4,7 @@ from photutils import DAOStarFinder, find_peaks
 from astropy.modeling import models, fitting
 from astropy.stats import sigma_clipped_stats
 
-def return_time_series_from_data_cube(data, nFWHM=3.0, nPixelsSeeing=3.0, nSig = 5.0, sigma=3.0, iters=5)
+def time_series_from_data_cube(data, nFWHM=3.0, nPixelsSeeing=3.0, nSig = 5.0, sigma=3.0, iters=5)
   mean, median, std = sigma_clipped_stats(data, sigma=sigma, iters=iters)
   
   aperRad = 1.5*nPixelsSeeing
