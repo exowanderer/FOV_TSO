@@ -53,6 +53,7 @@ def generate_field_of_view(nTimes=100, imageSize=100, nStars=10,
 
   for kt, _ in enumerate(times):
     for ks, (amp, yc, xc, ys, xs) in enumerate(zip(sAmplitudes, ycenters, xcenters, ywidths, xwidths)):
+      print(amp, yc, xc, ys, xs)
       imageCube[kt] += gaussian2D(yy, xx, amp, yc, xc, ys, xs)*starModels[ks][kt]
 
   if returnAll:
