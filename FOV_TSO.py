@@ -39,11 +39,12 @@ initModel = initModel + Const2D(amplitude=offset)
 
 fit_lvmq  = fitting.LevMarLSQFitter()
 
-positions = []
-gaussFits = []
+positions   = []
+apertures   = []
+phot_tables = []
+gaussFits   = []
 for image in images:
   gaussFits.append([])
-  positions.append([])
   for postageStamp in postageStamps:
     nowModel = initModel
     nowModel.y_mean = yc
@@ -51,8 +52,7 @@ for image in images:
 
     gaussFits[-1].append(fit_lvmq(nowModel, xx+xc,yy+yc, postageStamp))
   
-  positions = [gfit['xcentroid'], gfit['ycentroid'] for gfits in gaussFits]
-
-  apertures = CircularAperture(positions, r=aperRad)
+  positions.append([gfit['xcentroid'], gfit['ycentroid'] for gfits in gaussFits[-1]])
   
-  phot_table = aperture_photometry(data, apertures)
+  apertures.append(CircularAperture(positions[-1], r=aperRad))
+  phot_tables.append(aperture_photometry(data, apertures))
