@@ -25,7 +25,7 @@ def stellarModels(nTimes, nStars, minLogPeriod, maxLogPeriod, nPeriods, stdAmp):
   return starModels
 
 def generate_field_of_view(nTimes=1000, imageSize=1024, nStars=100, 
-                           fwhm=3., tMin=0, tMax=10, 
+                           fwhm=3., tMin=0, tMax=10, nPeriods=10,
                            minLogPeriod=-3, maxLogPeriod=2,
                            stdAmp=5e-3):
   
