@@ -1,5 +1,5 @@
 # from astropy.models import Gaussian2D
-from numpy import pi, sin, cos exp, logspace, zeros, indices, empty
+from numpy import pi, sin, cos, exp, logspace, zeros, indices, empty
 from numpy.random import uniform, normal
 
 def gaussian2D(yy, xx, amp, yc, xc, ys, xs):
