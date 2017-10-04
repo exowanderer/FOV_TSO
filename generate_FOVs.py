@@ -8,10 +8,10 @@ def gaussian2D(yy, xx, amp, yc, xc, ys, xs):
   
   return amp*exp(-0.5*(ychi**2 + xchi**2))
 
-def sineWave(sAmp, cAmp, angfreq):
-  return lambda times: sAmp*sin(angfreq*times) + cAmp*cos(angfreq*times)
+def sineWave(times, sAmp, cAmp, angfreq):
+  return sAmp*sin(angfreq*times) + cAmp*cos(angfreq*times)
 
-def stellarModels(nTimes, nStars, minLogPeriod, maxLogPeriod, nPeriods, stdAmp):
+def stellarModels(times, nTimes, nStars, minLogPeriod, maxLogPeriod, nPeriods, stdAmp):
   vPeriods  = logspace(minLogPeriod, maxLogPeriod, nPeriods)
   vAngFreqs = 2*pi / vPeriods
 
@@ -21,7 +21,7 @@ def stellarModels(nTimes, nStars, minLogPeriod, maxLogPeriod, nPeriods, stdAmp):
   starModels    = zeros((nStars, nTimes))
   for star, sAmps, cAmps in zip(starModels, vSinAmps, vCosAmps):
     for sAmp, cAmp, angfreq in zip(sAmps, cAmps, vAngFreqs):
-      star += sineWave(sAmp, cAmp, angfreq)(times)
+      star += sineWave(times, sAmp, cAmp, angfreq)
   
   return starModels
 
