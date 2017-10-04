@@ -61,9 +61,9 @@ def generate_field_of_view(nTimes=100, imageSize=100, nStars=10,
     return imageCube
 
 if __name__ == '__main__':
-  from pylab import imshow, ion
-  ion()
+  from pylab import imshow, show
   
   imageCube, starModels = generate_field_of_view(returnAll=True)
   
   imshow(imageCube[0])
+  show()
