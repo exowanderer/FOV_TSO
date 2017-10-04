@@ -1,5 +1,6 @@
 # from astropy.models import Gaussian2D
-import numpy as np
+from numpy import pi, sin, cos exp, logspace, zeros, indices, empty
+from numpy.random import uniform, normal
 
 def gaussian2D(yy, xx, amp, yc, xc, ys, xs):
   ychi  = (yy-yc) / ys
@@ -11,13 +12,13 @@ def sineWave(sAmp, cAmp, angfreq):
   return sAmp*sin(angfreq*times) + cAmp*cos(angfreq*times)
 
 def stellarModels(nTimes, nStars, minLogPeriod, maxLogPeriod, nPeriods, stdAmp):
-  vPeriods  = np.logspace(minLogPeriod, maxLogPeriod, nPeriods)
-  vAngFreqs = 2*np.pi / vPeriods
+  vPeriods  = logspace(minLogPeriod, maxLogPeriod, nPeriods)
+  vAngFreqs = 2*pi / vPeriods
 
-  vSinAmps  = np.random.normal(0, stdAmp, (nStars,nPeriods))
-  vCosAmps  = np.random.normal(0, stdAmp, (nStars,nPeriods))
+  vSinAmps  = normal(0, stdAmp, (nStars,nPeriods))
+  vCosAmps  = normal(0, stdAmp, (nStars,nPeriods))
 
-  starModels    = np.zeros((nStars, nTimes))
+  starModels    = zeros((nStars, nTimes))
   for star, sAmps, cAmps in zip(starModels, vSinAmps, vCosAmps):
     for sAmp, cAmp, angfreq in zip(sAmps, cAmps, vAngFreqs):
       star += sineWave(sAmp, cAmp, angfreq)
@@ -30,25 +31,25 @@ def generate_field_of_view(nTimes=1000, imageSize=1024, nStars=100,
                            stdAmp=5e-3):
   
   # set up size of data cube
-  imageCube = np.empty((nTimes, imageSize, imageSize))
+  imageCube = empty((nTimes, imageSize, imageSize))
 
   # set up time series variability to inject
-  times = np.linspace(tMin, tMax, nTimes)
+  times = linspace(tMin, tMax, nTimes)
   
   # Compute stellar variability per star
   starModels  = stellarModels(nTimes, nStars, minLogPeriod, maxLogPeriod, nPeriods, stdAmp)
   
   # Set up FOV -- stellar positions and amplitudes 
-  sAmplitudes = np.random.uniform(10,100, nStars)
+  sAmplitudes = uniform(10,100, nStars)
 
-  ycenters  = np.random.uniform(0,imageSize,nStars)
-  xcenters  = np.random.uniform(0,imageSize,nStars)
+  ycenters  = uniform(0,imageSize,nStars)
+  xcenters  = uniform(0,imageSize,nStars)
 
-  ywidths   = np.random.normal(fwhm, 1e-2*fwhm, nStars)
-  xwidths   = np.random.normal(fwhm, 1e-2*fwhm, nStars)
+  ywidths   = normal(fwhm, 1e-2*fwhm, nStars)
+  xwidths   = normal(fwhm, 1e-2*fwhm, nStars)
 
-  yy,xx = np.indices((imageSize,imageSize))
-  image = np.zeros((imageSize,imageSize))
+  yy,xx = indices((imageSize,imageSize))
+  image = zeros((imageSize,imageSize))
 
   for k, t in enumerate(times):
     for yc, xc, ys, xs in zip(amplitudes, ycenters, xcenters, ywidths, xwidths):
