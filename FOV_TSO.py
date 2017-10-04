@@ -54,3 +54,5 @@ def return_time_series_from_data_cube(data, nFWHM=3.0, nPixelsSeeing=3.0, nSig =
     
     apertures.append(CircularAperture(positions[-1], r=aperRad))
     phot_tables.append(aperture_photometry(data, apertures))
+  
+  return phot_tables
