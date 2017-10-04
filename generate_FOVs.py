@@ -12,7 +12,7 @@ def sineWave(sAmp, cAmp, angfreq):
 
 def stellarModels(nTimes, nStars, minLogPeriod, maxLogPeriod, nPeriods, stdAmp):
   vPeriods  = np.logspace(minLogPeriod, maxLogPeriod, nPeriods)
-  vAngFreqs = 2*pi / vPeriods
+  vAngFreqs = 2*np.pi / vPeriods
 
   vSinAmps  = np.random.normal(0, stdAmp, (nStars,nPeriods))
   vCosAmps  = np.random.normal(0, stdAmp, (nStars,nPeriods))
