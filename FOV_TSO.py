@@ -9,17 +9,17 @@ mean, median, std = sigma_clipped_stats(data, sigma=3.0, iters=5)
 nFWHM         = 2.0
 nPixelsSeeing = 3.0
 nSig          = 5.0
-daofind = DAOStarFinder(fwhm=nPixelsSeeing, threshold=nSig*std)
+
+aperRad = 1.5*nPixelsSeeing
+psSize  = nFWHM*nPixelSeeing
 
 useDAO = False:
 if useDAO:
+  daofind = DAOStarFinder(fwhm=nPixelsSeeing, threshold=nSig*std)
   sources = daofind(data - median)
 else:
-  sources = find_peaks(data, threshold, box_size=5)
+  sources = find_peaks(data, threshold=nSig*std, box_size=2*psSize)
 
-aperRad = 1.5*nPixelsSeeing
-
-psSize        = nFWHM*nPixelSeeing
 postageStamps = []
 for source in sources:
   yc0,xc0 = source['ycentroid'], source['xcentroid']
