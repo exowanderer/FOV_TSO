@@ -10,7 +10,7 @@ def gaussian2D(yy, xx, amp, yc, xc, ys, xs):
 def sineWave(sAmp, cAmp, angfreq):
   return sAmp*sin(angfreq*times) + cAmp*cos(angfreq*times)
 
-def randStellarModel(nTimes, nStars, minLogPeriod, maxLogPeriod, nPeriods, stdAmp):
+def stellarModels(nTimes, nStars, minLogPeriod, maxLogPeriod, nPeriods, stdAmp):
   vPeriods  = np.logspace(minLogPeriod, maxLogPeriod, nPeriods)
   vAngFreqs = 2*pi / vPeriods
 
@@ -36,7 +36,7 @@ def generate_field_of_view(nTimes=1000, imageSize=1024, nStars=100,
   times = np.linspace(tMin, tMax, nTimes)
   
   # Compute stellar variability per star
-  starModels  = randStellarModel(nTimes, nStars, minLogPeriod, maxLogPeriod, nPeriods, stdAmp)
+  starModels  = stellarModels(nTimes, nStars, minLogPeriod, maxLogPeriod, nPeriods, stdAmp)
   
   # Set up FOV -- stellar positions and amplitudes 
   sAmplitudes = uniform(10,100, nStars)
