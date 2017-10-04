@@ -7,27 +7,33 @@ def gaussian2D(yy, xx, amp, yc, xc, ys, xs):
   
   return amp*exp(-0.5*(ychi**2 + xchi**2))
 
+# set up size of data cube
 nTimes    = 1000
 imageSize = 1024
 nStars    = 100
 fwhm      = 3.0
 
+# set up time series variability to inject
 tMin      = 0
 tMax      = 10
 times     = np.linspace(tMin, tMax, nTimes)
 
+minPeriod = -3
+maxPeriod = 2.
 nPeriods  = 10
-vPeriods  = np.arange(nPeriods)
+vPeriods  = np.logspace(minPeriod, maxPeriod, nPeriods)
 vAngFreqs = 2*pi / vPeriods
 
-vSinAmps  = normal(0, 1e-3, (nStars,nPeriods))
-vCosAmps  = normal(0, 1e-3, (nStars,nPeriods))
+stdAmp    = 5e-3
+vSinAmps  = normal(0, stdAmp, (nStars,nPeriods))
+vCosAmps  = normal(0, stdAmp, (nStars,nPeriods))
 
 starModels    = np.zeros((nStars, nTimes))
-for star in starModels:
-  for sAmp, cAmp, angfreq in zip(vSinAmps, vCosAmps, vAngFreqs):
+for star, sAmps, cAmps in zip(starModels, vSinAmps, vCosAmps):
+  for sAmp, cAmp, angfreq in zip(sAmps, cAmps, vAngFreqs):
     star += sAmp*sin(angfreq*times/per) + cAmp*cos(angfreq*times)
 
+# Set up FOV -- stellar positions and amplitudes 
 sAmplitudes = uniform(10,100, nStars)
 
 ycenters  = uniform(0,imageSize,nStars)
