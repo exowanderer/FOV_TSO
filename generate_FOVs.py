@@ -37,7 +37,7 @@ def generate_field_of_view(nTimes=1000, imageSize=1024, nStars=100,
   times = linspace(tMin, tMax, nTimes)
   
   # Compute stellar variability per star
-  starModels  = stellarModels(nTimes, nStars, minLogPeriod, maxLogPeriod, nPeriods, stdAmp)
+  starModels  = stellarModels(times, nTimes, nStars, minLogPeriod, maxLogPeriod, nPeriods, stdAmp)
   
   # Set up FOV -- stellar positions and amplitudes 
   sAmplitudes = uniform(10,100, nStars)
