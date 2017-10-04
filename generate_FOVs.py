@@ -10,7 +10,11 @@ def gaussian2D(yy, xx, amp, yc, xc, ys, xs):
 def sineWave(sAmp, cAmp, angfreq):
   return sAmp*sin(angfreq*times) + cAmp*cos(angfreq*times)
 
-def generate_field_of_view(nTimes=1000, imageSize=1024, nStars=100, fwhm=3., tMin=0, tMax=10, minLogPeriod=-3, maxLogPeriod=2):
+def generate_field_of_view(nTimes=1000, imageSize=1024, nStars=100, 
+                           fwhm=3., tMin=0, tMax=10, 
+                           minLogPeriod=-3, maxLogPeriod=2,
+                           stdAmp=5e-3):
+  
   # set up size of data cube
   imageCube = np.empty((nTimes, imageSize, imageSize))
 
@@ -20,7 +24,6 @@ def generate_field_of_view(nTimes=1000, imageSize=1024, nStars=100, fwhm=3., tMi
   vPeriods  = np.logspace(minLogPeriod, maxLogPeriod, nPeriods)
   vAngFreqs = 2*pi / vPeriods
 
-  stdAmp    = 5e-3
   vSinAmps  = normal(0, stdAmp, (nStars,nPeriods))
   vCosAmps  = normal(0, stdAmp, (nStars,nPeriods))
 
