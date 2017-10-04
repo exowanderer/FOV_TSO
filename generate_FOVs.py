@@ -1,5 +1,5 @@
 # from astropy.models import Gaussian2D
-from numpy.random import uniform, normal
+import numpy as np
 
 def gaussian2D(yy, xx, amp, yc, xc, ys, xs):
   ychi  = (yy-yc) / ys
@@ -14,8 +14,8 @@ def stellarModels(nTimes, nStars, minLogPeriod, maxLogPeriod, nPeriods, stdAmp):
   vPeriods  = np.logspace(minLogPeriod, maxLogPeriod, nPeriods)
   vAngFreqs = 2*pi / vPeriods
 
-  vSinAmps  = normal(0, stdAmp, (nStars,nPeriods))
-  vCosAmps  = normal(0, stdAmp, (nStars,nPeriods))
+  vSinAmps  = np.random.normal(0, stdAmp, (nStars,nPeriods))
+  vCosAmps  = np.random.normal(0, stdAmp, (nStars,nPeriods))
 
   starModels    = np.zeros((nStars, nTimes))
   for star, sAmps, cAmps in zip(starModels, vSinAmps, vCosAmps):
@@ -39,13 +39,13 @@ def generate_field_of_view(nTimes=1000, imageSize=1024, nStars=100,
   starModels  = stellarModels(nTimes, nStars, minLogPeriod, maxLogPeriod, nPeriods, stdAmp)
   
   # Set up FOV -- stellar positions and amplitudes 
-  sAmplitudes = uniform(10,100, nStars)
+  sAmplitudes = np.random.uniform(10,100, nStars)
 
-  ycenters  = uniform(0,imageSize,nStars)
-  xcenters  = uniform(0,imageSize,nStars)
+  ycenters  = np.random.uniform(0,imageSize,nStars)
+  xcenters  = np.random.uniform(0,imageSize,nStars)
 
-  ywidths   = normal(fwhm, 1e-2*fwhm, nStars)
-  xwidths   = normal(fwhm, 1e-2*fwhm, nStars)
+  ywidths   = np.random.normal(fwhm, 1e-2*fwhm, nStars)
+  xwidths   = np.random.normal(fwhm, 1e-2*fwhm, nStars)
 
   yy,xx = np.indices((imageSize,imageSize))
   image = np.zeros((imageSize,imageSize))
