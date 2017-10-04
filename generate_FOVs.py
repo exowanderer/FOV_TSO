@@ -7,43 +7,45 @@ def gaussian2D(yy, xx, amp, yc, xc, ys, xs):
   
   return amp*exp(-0.5*(ychi**2 + xchi**2))
 
-# set up size of data cube
-nTimes    = 1000
-imageSize = 1024
-nStars    = 100
-fwhm      = 3.0
+def sineWave(sAmp, cAmp, angfreq):
+  return sAmp*sin(angfreq*times) + cAmp*cos(angfreq*times)
 
-# set up time series variability to inject
-tMin      = 0
-tMax      = 10
-times     = np.linspace(tMin, tMax, nTimes)
+def generate_field_of_view(nTimes=1000, imageSize=1024, nStars=100, fwhm=3., tMin=0, tMax=10, minLogPeriod=-3, maxLogPeriod=2):
+  # set up size of data cube
+  imageCube = np.empty((nTimes, imageSize, imageSize))
 
-minPeriod = -3
-maxPeriod = 2.
-nPeriods  = 10
-vPeriods  = np.logspace(minPeriod, maxPeriod, nPeriods)
-vAngFreqs = 2*pi / vPeriods
+  # set up time series variability to inject
+  times     = np.linspace(tMin, tMax, nTimes)
+  
+  vPeriods  = np.logspace(minLogPeriod, maxLogPeriod, nPeriods)
+  vAngFreqs = 2*pi / vPeriods
 
-stdAmp    = 5e-3
-vSinAmps  = normal(0, stdAmp, (nStars,nPeriods))
-vCosAmps  = normal(0, stdAmp, (nStars,nPeriods))
+  stdAmp    = 5e-3
+  vSinAmps  = normal(0, stdAmp, (nStars,nPeriods))
+  vCosAmps  = normal(0, stdAmp, (nStars,nPeriods))
 
-starModels    = np.zeros((nStars, nTimes))
-for star, sAmps, cAmps in zip(starModels, vSinAmps, vCosAmps):
-  for sAmp, cAmp, angfreq in zip(sAmps, cAmps, vAngFreqs):
-    star += sAmp*sin(angfreq*times/per) + cAmp*cos(angfreq*times)
+  starModels    = np.zeros((nStars, nTimes))
+  for star, sAmps, cAmps in zip(starModels, vSinAmps, vCosAmps):
+    for sAmp, cAmp, angfreq in zip(sAmps, cAmps, vAngFreqs):
+      star += sinewave(sAmp, cAmp, angfreq)
 
-# Set up FOV -- stellar positions and amplitudes 
-sAmplitudes = uniform(10,100, nStars)
+  # Set up FOV -- stellar positions and amplitudes 
+  sAmplitudes = uniform(10,100, nStars)
 
-ycenters  = uniform(0,imageSize,nStars)
-xcenters  = uniform(0,imageSize,nStars)
+  ycenters  = uniform(0,imageSize,nStars)
+  xcenters  = uniform(0,imageSize,nStars)
 
-ywidths   = normal(fwhm, 1e-2*fwhm, nStars)
-xwidths   = normal(fwhm, 1e-2*fwhm, nStars)
+  ywidths   = normal(fwhm, 1e-2*fwhm, nStars)
+  xwidths   = normal(fwhm, 1e-2*fwhm, nStars)
 
-yy,xx = np.indices((imageSize,imageSize))
-image = np.zeros((imageSize,imageSize))
+  yy,xx = np.indices((imageSize,imageSize))
+  image = np.zeros((imageSize,imageSize))
 
-for yc, xc, ys, xs in zip(amplitudes, ycenters, xcenters, ywidths, xwidths):
-  image += gaussian2D(yy, xx, amp, yc, xc, ys, xs)
+  for k, t in enumerate(times):
+    for yc, xc, ys, xs in zip(amplitudes, ycenters, xcenters, ywidths, xwidths):
+      imageCube[k] += gaussian2D(yy, xx, amp, yc, xc, ys, xs)*starModels[k]
+
+  if returnAll:
+    return imageCube, starModels
+  else:
+    return imageCube
