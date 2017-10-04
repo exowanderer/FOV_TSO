@@ -20,8 +20,11 @@ def stellarModels(times, nTimes, nStars, minLogPeriod, maxLogPeriod, nPeriods, s
 
   starModels    = zeros((nStars, nTimes))
   for star, sAmps, cAmps in zip(starModels, vSinAmps, vCosAmps):
+    denom = 1.
     for sAmp, cAmp, angfreq in zip(sAmps, cAmps, vAngFreqs):
-      star += sineWave(times, sAmp, cAmp, angfreq)
+      star += sineWave(times, sAmp, cAmp, angfreq) / denom
+      denom/= 10.0
+      
     star += 1.0
     
   return starModels
