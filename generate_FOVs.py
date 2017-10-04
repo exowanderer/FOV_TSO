@@ -10,17 +10,7 @@ def gaussian2D(yy, xx, amp, yc, xc, ys, xs):
 def sineWave(sAmp, cAmp, angfreq):
   return sAmp*sin(angfreq*times) + cAmp*cos(angfreq*times)
 
-def generate_field_of_view(nTimes=1000, imageSize=1024, nStars=100, 
-                           fwhm=3., tMin=0, tMax=10, 
-                           minLogPeriod=-3, maxLogPeriod=2,
-                           stdAmp=5e-3):
-  
-  # set up size of data cube
-  imageCube = np.empty((nTimes, imageSize, imageSize))
-
-  # set up time series variability to inject
-  times     = np.linspace(tMin, tMax, nTimes)
-  
+def randStellarModel(nTimes, nStars, minLogPeriod, maxLogPeriod, nPeriods, stdAmp):
   vPeriods  = np.logspace(minLogPeriod, maxLogPeriod, nPeriods)
   vAngFreqs = 2*pi / vPeriods
 
@@ -31,7 +21,23 @@ def generate_field_of_view(nTimes=1000, imageSize=1024, nStars=100,
   for star, sAmps, cAmps in zip(starModels, vSinAmps, vCosAmps):
     for sAmp, cAmp, angfreq in zip(sAmps, cAmps, vAngFreqs):
       star += sinewave(sAmp, cAmp, angfreq)
+  
+  return starModels
 
+def generate_field_of_view(nTimes=1000, imageSize=1024, nStars=100, 
+                           fwhm=3., tMin=0, tMax=10, 
+                           minLogPeriod=-3, maxLogPeriod=2,
+                           stdAmp=5e-3):
+  
+  # set up size of data cube
+  imageCube = np.empty((nTimes, imageSize, imageSize))
+
+  # set up time series variability to inject
+  times = np.linspace(tMin, tMax, nTimes)
+  
+  # Compute stellar variability per star
+  starModels  = randStellarModel(nTimes, nStars, minLogPeriod, maxLogPeriod, nPeriods, stdAmp)
+  
   # Set up FOV -- stellar positions and amplitudes 
   sAmplitudes = uniform(10,100, nStars)
 
