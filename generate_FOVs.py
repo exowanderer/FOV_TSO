@@ -20,7 +20,7 @@ def stellarModels(nTimes, nStars, minLogPeriod, maxLogPeriod, nPeriods, stdAmp):
   starModels    = np.zeros((nStars, nTimes))
   for star, sAmps, cAmps in zip(starModels, vSinAmps, vCosAmps):
     for sAmp, cAmp, angfreq in zip(sAmps, cAmps, vAngFreqs):
-      star += sinewave(sAmp, cAmp, angfreq)
+      star += sineWave(sAmp, cAmp, angfreq)
   
   return starModels
 
